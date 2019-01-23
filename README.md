@@ -1,5 +1,5 @@
 # R-Shiny
-# Diamond Data: https://www.dropbox.com/s/ipdff06edkjlotz/diamonds.txt?dl=1
+Diamond Data: https://www.dropbox.com/s/ipdff06edkjlotz/diamonds.txt?dl=1
 
 In this assignment, I am asked to create a Shiny app with the following features:
 1. A fileInput to let the users upload a tab separated file of data. 
