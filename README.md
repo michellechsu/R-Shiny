@@ -1,4 +1,4 @@
-# R-Shiny
+# R-Shiny - BS 803 Assignment 
 Diamond Data: https://www.dropbox.com/s/ipdff06edkjlotz/diamonds.txt?dl=1
 
 In this assignment, I am asked to create a Shiny app with the following features:
