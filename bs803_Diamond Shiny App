@@ -1,0 +1,86 @@
+---
+title: "Diamond Shiny App"
+author: "Michelle C. Hsu"
+date: "October 28, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#########################################
+#                libraries              #
+#########################################
+```{r}
+library(shiny)
+library(shinythemes)
+library(readr)
+library(DT)
+library(plotly)
+library(shinyjs)
+```
+#########################################
+#         Diamond Shiny App             #
+#########################################
+```{r}
+# Define UI for dataset viewer app ----
+ui <- fluidPage(
+ 
+       # App title ----
+       titlePanel("Diamond Shiny App"),
+      useShinyjs(),
+      
+       # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+    sidebarPanel(
+      
+      fileInput("data", "Upload Data Here:",
+                accept = c(
+                  "text/comma-separated-values,text/plain", 
+                  "text/csv",
+                  ".csv")),
+      # Request user defined subset of data ----
+      div(id="form",sliderInput("num", "Data Subset",
+                                min=1,max = 53940, value=53940)),
+      
+      # Reset button function ----
+      actionButton("reset", "Reset"),
+      
+      tags$hr(),
+      checkboxInput("header", "Header", TRUE)),
+    
+    mainPanel(
+      # Output: hist ----
+      plotOutput("distPlot"), 
+      # Output: requested table ----
+      tableOutput("contents"),
+      # layouts- organize panels and elements into a layout 
+      fluidRow(
+        column(12, #update the DataTale
+               DT::dataTableOutput('table') ) ) ) ) )
+
+
+##output
+# Define server logic to plot and view subsetted dataset ----
+
+server <- function(input, output){
+  #interactive#
+  subsetdata<-reactive({
+    req(input$data)
+    read.delim(input$data$datapath, header = input$header,nrows=input$num)})
+  output$distPlot <- renderPlot({
+    hist(subsetdata()$carat)})
+    # The output$table depends on both the databaseInput reactive
+  # expression and input$data, so it will be re-executed whenever
+  # input$data or input$num is changed
+  output$table <- renderDataTable(
+    subsetdata(), )
+  
+ #test action button
+  observeEvent(input$reset, {
+    reset("form")
+  })}
+
+shinyApp(ui = ui, server = server)
+```
+
